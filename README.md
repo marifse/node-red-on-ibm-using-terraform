@@ -120,7 +120,7 @@ terraform apply
 cd node-red-on-ibm-using-terraform/with-new-cluster/helm/
 ```
 
-•   Replace the **API key** value with your key and set the cluster name in variables.tf file.
+•   Replace the **API key** value with your key and set the **cluster name** in variables.tf file.
 
 •	Initialize this repo again with the following command.
 
