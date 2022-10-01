@@ -48,7 +48,7 @@ To deploy Node-RED on IBM Cloud Kubernetes service using Terraform, you should h
     </a>
 </p>
 
-This repo includes two subfolders, one for deploying Node-RED to an existing Kubernetes cluster and while the other subfolder is for deploying Node-RED along with creating the Kubernetes cluster and deploying Node-red on top of it.
+This repo includes two subfolders, one for deploying Node-RED to an existing Kubernetes cluster and while the other subfolder is for deploying Node-RED along with creating the Kubernetes cluster and deploying Node-RED on top of it.
 
 To start deploying, clone the repo to local machine using the following commands and follow the instructions in next section as per the scenario available.
 
