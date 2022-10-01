@@ -13,38 +13,34 @@
 </p>
 
 
-# Deploy NodeJS+Cloudant Application on IBM Cloud using Terraform
+# Deploy Node-RED on IBM Cloud
 
-This document will describe how to deploy NodeJS application on IBM Cloud Kubernetes Service using Terraform (IaC Tool).
+This document will describe how to setup Node-RED on IBM Cloud Kubernetes Service using Terraform (IaaC Tool).
 
 ### Contents
 
 #### 1.     Introduction
 #### 2.     Pre-requisites
-#### 3.     Deploying to IBM Cloud using Terraform
-#### 3.1	    Using Tekton Toolchain pipeline
-#### 3.1.1      To a new Kubernetes cluster
-#### 3.2	    Using Classic Toolchain pipeline
-#### 3.2.1	    To a new Kubernetes cluster 
-#### 3.2.2      To an existing Kubernetes cluster
+#### 3.     Deploying Node-RED to IBM Cloud Kubernetes cluster using Terraform
+#### 3.1.     To an existing Kubernetes cluster
+#### 3.2	  To a new Kubernetes cluster    
 
 
 ### 1.0 Introduction
 
-To complete this tutorial, you should have an IBM Cloud account, if you do not have one, please [register/signup](https://cloud.ibm.com/registration) here. This application requires the Kubernetes cluster for running NodeJS application and the Cloudant database service for hosting the database.
+To complete this tutorial, you should have an IBM Cloud account, if you do not have one, please [register/signup](https://cloud.ibm.com/registration) here. 
 
 **Note:** You can perform this job either using free cluster or standard cluster, in this tutorial it is done using free cluster.
 
 ### 2.0 Pre-requisites
 
-To deploy NodeJS application on IBM Cloud Kubernetes service using Terraform, you should have the following software installed on your system.
+To deploy Node-RED on IBM Cloud Kubernetes service using Terraform, you should have the following software installed on your system.
 
   -	Terraform
-  -	IBM Cloud CLI
-  -	Kubectl
-  -	JQ
+  -	IBM Cloud CLI (optional)
+  -	Kubectl (optional)
 
-### 3.0	Deploying to IBM Cloud using Terraform
+### 3.0	Deploying Node-RED to IBM Cloud Kubernetes cluster using Terraform
 
 <p align="center">
     <a href="https://cloud.ibm.com/developer/appservice/create-app?defaultDeploymentToolchain=&defaultLanguage=NODE&navMode=starterkits&starterKit=3f3f65c6-4a2c-3255-8e80-d2ac52ca608a">
@@ -52,81 +48,40 @@ To deploy NodeJS application on IBM Cloud Kubernetes service using Terraform, yo
     </a>
 </p>
 
-This repo includes two subfolders, one for deploying NodeJS application to Kubernetes cluster with Classic toolchain and while the other subfolder is for deploying the same with Tekton toolchain. 
+This repo includes two subfolders, one for deploying Node-RED to an existing Kubernetes cluster and while the other subfolder is for deploying Node-RED along with creating the Kubernetes cluster and deploying Node-red on top of it.
 
-To start deploying, clone the repo to local machine using the following command and follow the instructions in next section as per the scenario available.
-
-```bash
-git clone https://github.com/marifse/nodejs-cloudant.git
-```
-### 3.1	Using a Tekton Toolchain pipeline
-
-### 3.1.1 To a new Kubernetes cluster
-
-To deploy NodeJS to a new Kubernetes cluster, clone the repo as mentioned in above step 3.0, and follow the steps below. 
-
-•	Go into sub-directory (nodejs-cloudant/terraform/simple-kube/tekton/new-infra/) of cloned repo with below command.
+To start deploying, clone the repo to local machine using the following commands and follow the instructions in next section as per the scenario available.
 
 ```bash
-cd nodejs-cloudant/terraform/simple-kube/tekton/new-infra
+git clone https://github.com/marifse/node-red-on-ibm-using-terraform.git
+```
+### 3.1	To an existing Kubernetes cluster
+
+To deploy Node-RED on existing cluster clone the repo as mentioned in the above step 3.0, and follow the steps below. 
+
+•	Go into sub-directory [(with-existing-cluster)](https://github.com/marifse/node-red-on-ibm-using-terraform/tree/main/with-existing-cluster) of cloned repo with below command.
+
+```bash
+cd node-red-on-ibm-using-terraform/with-existing-cluster/
 ```
 
-•	Replace the API key value with your key and set the other variables values as desired or required.
+•	Replace the **API key** value with your key and the **cluster_id** variable with your cluster name in variables.tf file.
 
-•	Initialize the repo with below command.
+•	Initialize the repo using the below command.
 
 ```bash
 terraform init
 ```
 
-•	Deploy NodeJS application with below terraform command.
+•	Deploy Node-RED with using the terraform command below:
 
 ```bash
 terraform apply
 ```
 
-• Confirm with “yes”.
+• Confirm with **yes**.
 
-This terraform script will provision the IKS free Classic cluster, Cloudant database, and a Tekton toolchain, which is auto triggered on its creation and deploying the application to the created IKS Kubernetes cluster.
-
-To get the URL for deployed application, go to Toolchain service in IBM Cloud console, and select the region where the toolchain has been created and go to triggered event, and there in deployment stage, you can find the application URL as IPAddress:port in last lines of the executions. Open that URL in browser and you can see the NodeJS application deployed there.
-•	To destroy the deployment run below terraform command.
-
-```bash
-terraform destroy
-```
-
-### 3.1	Using a Classic Toolchain pipeline
-
-To deploy NodeJS to a new Kubernetes cluster using Classic pipeline, there are two options either deploying to existing Kubernetes cluster or to a new Kubernetes cluster.
-
-### 3.2.1 To a new Kubernetes cluster
-
-Clone the repo as told in above step 3.0, and follow the below steps. 
-
-• Go into sub-directory [(with-new-cluster)](https://github.com/marifse/nodejs-cloudant/tree/master/terraform/simple-kube/classic-pipeline/new-infra) of cloned repo with below command.
-
-```bash
-cd nodejs-cloudant/terraform/simple-kube/classic-pipeline/new-infra/
-```
-
-• Replace the **API key** value with your key and set the **cluster name, Cloudant database name, and the container registry namespace** and other variables as desired.
-
-•	Initialize the repo with below command.
-
-```bash
-terraform init
-```
-
-•	Deploy NodeJS with below terraform command.
-
-```bash
-terraform apply
-```
-
-• Confirm with “yes”.
-
-Once all the resources have been provisioned, you can go to the Toolchain service in IBM Cloud console and in deployed region, you would find the delivery pipeline, there would be three stages, and in third deployment stage, you would find the URL for your NodeJS application deployed over there. You can open that URL in browser and see your application running.
+Once the Node-RED has been deployed onto the cluster, you will get the port number on which the node-red application will be running. To check the nodeport ip address, you can see it from IBM Cloud console in cluster details. You can open the Node-RED with IPAddress:port on any browser.
 
 •	To destroy the deployment run below terraform command.
 
@@ -134,37 +89,53 @@ Once all the resources have been provisioned, you can go to the Toolchain servic
 terraform destroy
 ```
 
-### 3.2.2 To an existing Kubernetes cluster
+### 3.2	To a new Kubernetes cluster
 
-Clone the repo as mentioned in above step 3.0, and follow the steps below. 
+To deploy Node-RED along-with creating the new cluster. Clone the repo as mentioned in above step 3.0, and follow the steps below: 
 
-• Go into sub-directory (with-existing-cluster) of cloned repo with below command.
+•   Go to sub-directory [(with-new-cluster)](https://github.com/marifse/node-red-on-ibm-using-terraform/tree/main/with-new-cluster) of cloned repo with the following command.
 
 ```bash
-cd nodejs-cloudant/terraform/simple-kube/classic-pipeline/on-existing-cluster-cloudant
+cd node-red-on-ibm-using-terraform/with-new-cluster/
 ```
 
-•	Replace the API key value with your key and set the cluster name and the Cloudant database name with your existing IKS cluster name and Cloudant DB name, and other variables as desired.
+•   Replace the **API key** value with your key and set the **cluster name** in variables.tf file.
 
-•	Initialize the repo with below terraform command.
+•   Initialize the repo with the following command.
 
 ```bash
 terraform init
 ```
 
-•	Deploy NodeJS with below terraform command.
+•   Provision the Kubernetes cluster with the terraform command as follows:
 
 ```bash
 terraform apply
 ```
+•   Confirm with **yes**
 
-• Confirm with “yes”.
+•   Once the cluster has been provisioned, go to the sub-directory [node-red-on-ibm-using-terraform/with-new-cluster/helm/](https://github.com/marifse/node-red-on-ibm-using-terraform/tree/main/with-new-cluster/helm) using the following command.
 
-Once all the resources have been provisioned, you can go to the Toolchain service in IBM Cloud console and in deployed region, you would find the delivery pipeline, there would be three stages, and in third deployment stage, you would find the URL for your NodeJS application deployed over there. You can open that URL in browser and see your application running.
+```bash
+cd node-red-on-ibm-using-terraform/with-new-cluster/helm/
+```
+
+•   Replace the **API key** value with your key and set the cluster name in variables.tf file.
+
+•	Initialize this repo again with the following command.
+
+```bash
+terraform init
+```
+•   Deploy Node-RED using the following terraform command.
+```bash
+terraform apply
+```
+
+Once the Node-red has been deployed to the cluster, you would get the port number on which the Node-RED will be running. To check the nodeport IP address you can see it from IBM Cloud console in cluster details. You can open the Node-RED with IPAddress:port on any browser.
 
 •	To destroy the deployment run below terraform command.
 
 ```bash
 terraform destroy
 ```
-
